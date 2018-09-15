@@ -37,7 +37,7 @@ namespace MagicLeap
         #endregion
 
         #region Private Variables
-        private ViewMode _viewMode = ViewMode.All;
+        private ViewMode _viewMode = ViewMode.DemoOnly;
 
         [SerializeField, Tooltip("Image Tracking Visualizers to control")]
         private ImageTrackingVisualizer [] _visualizers;

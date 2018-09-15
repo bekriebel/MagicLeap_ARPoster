@@ -40,7 +40,7 @@ namespace MagicLeap
         [SerializeField, Tooltip("Game Object showing the demo")]
         private GameObject _demo;
 
-        private ImageTrackingExample.ViewMode _lastViewMode = ImageTrackingExample.ViewMode.All;
+        private ImageTrackingExample.ViewMode _lastViewMode = ImageTrackingExample.ViewMode.DemoOnly;
         #endregion
 
         #region Unity Methods
