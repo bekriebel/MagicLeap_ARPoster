@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ARPoster.unity
     guid: 2c7fe7391290bc0439b8a9495d9d7571
+  - enabled: 0
+    path: Assets/MagicLeap/Examples/Scenes/MediaPlayer.unity
+    guid: b08c428ac5e0b41158b0d405bc436f75
+  - enabled: 0
+    path: Assets/MagicLeap/Soundfield/Examples/Scenes/MSADemo.unity
+    guid: fb6f1a21beed9a740ad5939ed3d4e90f
   m_configObjects: {}
