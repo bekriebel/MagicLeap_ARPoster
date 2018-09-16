@@ -27,6 +27,7 @@ namespace MagicLeap
         #region Private Variables
         private MLImageTrackerBehavior _trackerBehavior;
         private bool _targetFound = false;
+        private float _lostTime = 0;
 
         [SerializeField, Tooltip("Text to update on ImageTracking changes.")]
         private Text _statusLabel;
@@ -98,6 +99,15 @@ namespace MagicLeap
             _trackerBehavior.OnTargetFound -= OnTargetFound;
             _trackerBehavior.OnTargetLost -= OnTargetLost;
         }
+
+        
+        void Update()
+        {
+            if (!_targetFound && _lostTime > 0 && Time.time - _lostTime >= 1)
+            {
+                RefreshViewMode();
+            }
+        }
         #endregion
 
         #region Event Handlers
@@ -119,7 +129,17 @@ namespace MagicLeap
         {
             _statusLabel.text = String.Format("{0}Target Lost", _prefix);
             _targetFound = false;
-            RefreshViewMode();
+            if (_lostTime == 0) {
+                _lostTime = Time.time;
+            }
+
+            // Debug.LogError("Time: " + Time.time);
+            // Debug.LogError("Lost time: "  + _lostTime);
+            // Debug.LogError("Dif time: " + _lostTime);
+            // if (Time.time - _lostTime >= 1)
+            // {
+            //     RefreshViewMode();
+            // }
         }
 
         /// <summary>
@@ -148,6 +168,10 @@ namespace MagicLeap
                     _axis.SetActive(false);
                     _trackingCube.SetActive(false);
                     _demo.SetActive(_targetFound);
+                    if (_targetFound == false)
+                    {
+                        _lostTime = 0;
+                    }
                     break;
             }
         }
