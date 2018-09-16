@@ -12,8 +12,9 @@ namespace MagicLeap
         private Vector3 _positionOffset;
 
         [Header("Video Player System")]
-        [SerializeField, Tooltip("Video Player System")]
-        private GameObject _videoSystemObject;
+        [SerializeField, Tooltip("Prefab of the Video Player System")]
+        private GameObject _videoSystemPrefab;
+        private Transform _videoSystemInstance;
         private Vector3 _videoSystemVel;
         #endregion
 
@@ -23,30 +24,32 @@ namespace MagicLeap
         /// </summary>
         void Awake()
         {
-            if (null == _videoSystemObject)
+            if (null == _videoSystemPrefab)
             {
-                Debug.LogError("VideoSystemLauncher._videoSystemObject not set, disabling script.");
+                Debug.LogError("VideoSystemLauncher._videoSystemPrefab not set, disabling script.");
                 enabled = false;
                 return;
             }
         }
 
         /// <summary>
-        /// Enables the video player system
+        /// Creates an instance of the video player system
         /// </summary>
         void OnEnable()
         {
-            UpdatePositionRotation();
-            _videoSystemObject.SetActive(true);
+            _videoSystemInstance = Instantiate(_videoSystemPrefab.transform, GetPosition(), transform.rotation);
+            _videoSystemInstance.gameObject.SetActive(true);
         }
 
         /// <summary>
-        /// Disables the video player system instance
+        /// Destroys the video player system instance
         /// </summary>
         void OnDisable()
         {
+            if (null != _videoSystemInstance)
             {
-                _videoSystemObject.SetActive(false);
+                Destroy(_videoSystemInstance.gameObject, 1.1f);
+                _videoSystemInstance = null;
             }
         }
 
@@ -55,7 +58,11 @@ namespace MagicLeap
         /// </summary>
         void Update()
         {
-            UpdatePositionRotation();
+            Vector3 position = GetPosition();
+
+            // Update video player system position
+            _videoSystemInstance.position = Vector3.SmoothDamp(_videoSystemInstance.position, position, ref _videoSystemVel, 1.0f);
+            _videoSystemInstance.rotation = transform.rotation;
         }
         #endregion
 
@@ -67,18 +74,6 @@ namespace MagicLeap
         private Vector3 GetPosition()
         {
             return transform.position + transform.TransformDirection(_positionOffset);
-        }
-
-        /// <summary>
-        /// Update the position of the object to match the reference image
-        /// </summary>
-        void UpdatePositionRotation()
-        {
-            Vector3 position = GetPosition();
-
-            // Update video player system position
-            _videoSystemObject.transform.position = Vector3.SmoothDamp(_videoSystemObject.transform.position, position, ref _videoSystemVel, 1.0f);
-            _videoSystemObject.transform.rotation = transform.rotation;
         }
         #endregion
     }
